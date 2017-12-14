@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Credit Card Fraud Detection | Kaggle</title>
+    <meta charset="utf-8" />
+    <meta name="robots" content="index, follow"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">    <meta name="theme-color" content="#008ABC" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" /><link rel="dns-prefetch" href="https://stats.g.doubleclick.net" /><link rel="dns-prefetch" href="https://js.intercomcdn.com" /><link rel="preload" href="https://az416426.vo.msecnd.net/scripts/a/ai.0.js" as=script /><link rel="dns-prefetch" href="https://kaggle2.blob.core.windows.net" />
+    <link href="/content/v/d420a040e581/kaggle/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="manifest" href="/static/json/manifest.json">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic" rel='stylesheet' type='text/css'>
+                <link rel="stylesheet" type="text/css" href="/static/assets/vendor.css?v=72f4ef2ebe4f"/>
+        <link rel="stylesheet" type="text/css" href="/static/assets/app.css?v=ee7639f794a8"/>
+        <script>
+            
+            (function () {
+                var originalError = window.onerror;
+
+                window.onerror = function (message, url, lineNumber, columnNumber, error) {
+                    var handled = originalError && originalError(message, url, lineNumber, columnNumber, error);
+                    var blockedByCors = message && message.toLowerCase().indexOf("script error") >= 0;
+                    return handled || blockedByCors;
+                };
+            })();
+        </script>
+    <script>
+        var appInsights=window.appInsights||function(config){
+        function i(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s="AuthenticatedUserContext",h="start",c="stop",l="Track",a=l+"Event",v=l+"Page",y=u.createElement(o),r,f;y.src=config.url||"https://az416426.vo.msecnd.net/scripts/a/ai.0.js";u.getElementsByTagName(o)[0].parentNode.appendChild(y);try{t.cookie=u.cookie}catch(p){}for(t.queue=[],t.version="1.0",r=["Event","Exception","Metric","PageView","Trace","Dependency"];r.length;)i("track"+r.pop());return i("set"+s),i("clear"+s),i(h+a),i(c+a),i(h+v),i(c+v),i("flush"),config.disableExceptionTracking||(r="onerror",i("_"+r),f=e[r],e[r]=function(config,i,u,e,o){var s=f&&f(config,i,u,e,o);return s!==!0&&t["_"+r](config,i,u,e,o),s}),t
+        }({
+            instrumentationKey:"5b3d6014-f021-4304-8366-3cf961d5b90f",
+            disableAjaxTracking: true
+        });
+        window.appInsights=appInsights;
+        appInsights.trackPageView();
+    </script>
+    
+    
+    
+ 
+    
+    <script>
+    window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
+    ga('create', 'UA-12629138-1', 'auto');
+    ga('set', 'displayFeaturesTask', null);
+    ga('send', 'pageview');
+    </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+    
+<script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+    fbq("set", "autoConfig", "false", "136809193586742");
+    fbq('init', '136809193586742'); 
+    fbq('track', 'PageView');
+</script>
+<noscript>
+    <img height="1" width="1" src="https://www.facebook.com/tr?id=136809193586742&ev=PageView&noscript=1"/>
+</noscript>
+
+    
+
+    <script>
+          window.intercomSettings = {
+            app_id: "koj6gxx6"
+          };
+    </script>
+<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/koj6gxx6';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>
+    
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@kaggledatasets"/>
+    <meta name="og:url" content="https://www.kaggle.com/dalpozz/creditcardfraud" />
+    <meta name="og:title" content="Credit Card Fraud Detection" />
+    <meta name="og:description" content="Anonymized credit card transactions labeled as fraudulent or genuine" />
+    <meta name="og:image" content="https://kaggle2.blob.core.windows.net/datasets-images/310/684/3503c6c827ca269cc00ffa66f2a9c207/dataset-card.jpg" />
+
+
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org/","@type":"Dataset","name":"Credit Card Fraud Detection","description":"The datasets contains transactions made by credit cards in September 2013 by european cardholders. \nThis dataset presents transactions that occurred in two days, where we have 492 frauds out of 284,807 transactions. The dataset is highly unbalanced, the positive class (frauds) account for 0.172% of all transactions.\n\nIt contains only numerical input variables which are the result of a PCA transformation. Unfortunately, due to confidentiality issues, we cannot provide the original features and more background information about the data. Features V1, V2, ... V28 are the principal components obtained with PCA, the only features which have not been transformed with PCA are 'Time' and 'Amount'. Feature 'Time' contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature 'Amount' is the transaction Amount, this feature can be used for example-dependant cost-senstive learning. Feature 'Class' is the response variable and it takes value 1 in case of fraud and 0 otherwise. \n\nGiven the class imbalance ratio, we recommend measuring the accuracy using the Area Under the Precision-Recall Curve (AUPRC). Confusion matrix accuracy is not meaningful for unbalanced classification.\n\nThe dataset has been collected and analysed during a  research collaboration of Worldline and the Machine Learning Group (http://mlg.ulb.ac.be) of ULB (Université Libre de Bruxelles) on big data mining and fraud detection.\nMore details on current and past projects on related topics are available on http://mlg.ulb.ac.be/BruFence and http://mlg.ulb.ac.be/ARTML\n\nPlease cite: Andrea Dal Pozzolo, Olivier Caelen, Reid A. Johnson and Gianluca Bontempi. Calibrating Probability with Undersampling for Unbalanced Classification. In Symposium on Computational Intelligence and Data Mining (CIDM), IEEE, 2015","url":"https://www.kaggle.comdalpozz/creditcardfraud","sameAs":"https://staging.kaggle.com/dalpozz/creditcardfraud","version":2,"keywords":["society and social sciences > society > finance","society and social sciences > society > crime","medium","featured"],"license":{"@type":"CreativeWork","name":"Database: Open Database, Contents: Database Contents","url":"http://opendatacommons.org/licenses/dbcl/1.0/"},"identifier":"310","includedInDataCatalog":{"@type":"DataCatalog","name":"Kaggle","url":"https://www.kaggle.com"},"creator":{"@type":"Person","name":"Andrea","url":"https://www.kaggle.com//dalpozz","image":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/14069-kg.jpg"},"distribution":[{"@type":"DataDownload","requiresSubscription":true,"encodingFormat":"zip","fileFormat":"zip","contentUrl":"https://www.kaggle.com//dalpozz/creditcardfraud/downloads/creditcardfraud.zip","contentSize":"71387154 bytes"},{"@type":"DataDownload","requiresSubscription":true,"encodingFormat":"csv","fileFormat":"csv","contentUrl":"https://www.kaggle.com//dalpozz/creditcardfraud/downloads/creditcard.csv","contentSize":"71387154 bytes"}],"commentCount":72,"dateModified":"2016-11-05T09:08:46.503","discussionUrl":"https://www.kaggle.comdalpozz/creditcardfraud/discussion","alternateName":"Anonymized credit card transactions labeled as fraudulent or genuine","isAccessibleForFree":true,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/datasets-images/310/684/3503c6c827ca269cc00ffa66f2a9c207/dataset-card.jpg","interactionStatistic":[{"@type":"InteractionCounter","interactionType":"http://schema.org/CommentAction","userInteractionCount":72},{"@type":"InteractionCounter","interactionType":"http://schema.org/DownloadAction","userInteractionCount":46823},{"@type":"InteractionCounter","interactionType":"http://schema.org/ViewAction","userInteractionCount":393415},{"@type":"InteractionCounter","interactionType":"http://schema.org/LikeAction","userInteractionCount":1032}]}</script>
+
+
+    <script src="/static/assets/manifest.js?v=47a28ec84654"></script>
+<script src="/static/assets/vendor.js?v=0ff502527c16"></script>
+</head>
+<body>
+    
+
+
+
+
+
+
+
+<div class="site-layout">
+        <div class="site-layout__header">
+            <div data-component-name="SiteHeaderContainer"></div><script>var Kaggle=window.Kaggle||{};Kaggle.State=Kaggle.State||[];Kaggle.State.push({});performance && performance.mark && performance.mark("SiteHeaderContainer.componentCouldBootstrap");</script>
+        </div>
+
+    <div class="site-layout__main-content">
+        
+
+<div data-component-name="DatasetContainer"></div><script>var Kaggle=window.Kaggle||{};Kaggle.State=Kaggle.State||[];Kaggle.State.push({"datasetId":310,"overview":"Anonymized credit card transactions labeled as fraudulent or genuine","description":"The datasets contains transactions made by credit cards in September 2013 by european cardholders. \nThis dataset presents transactions that occurred in two days, where we have 492 frauds out of 284,807 transactions. The dataset is highly unbalanced, the positive class (frauds) account for 0.172% of all transactions.\n\nIt contains only numerical input variables which are the result of a PCA transformation. Unfortunately, due to confidentiality issues, we cannot provide the original features and more background information about the data. Features V1, V2, ... V28 are the principal components obtained with PCA, the only features which have not been transformed with PCA are \u0027Time\u0027 and \u0027Amount\u0027. Feature \u0027Time\u0027 contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature \u0027Amount\u0027 is the transaction Amount, this feature can be used for example-dependant cost-senstive learning. Feature \u0027Class\u0027 is the response variable and it takes value 1 in case of fraud and 0 otherwise. \n\nGiven the class imbalance ratio, we recommend measuring the accuracy using the Area Under the Precision-Recall Curve (AUPRC). Confusion matrix accuracy is not meaningful for unbalanced classification.\n\nThe dataset has been collected and analysed during a  research collaboration of Worldline and the Machine Learning Group (http://mlg.ulb.ac.be) of ULB (Université Libre de Bruxelles) on big data mining and fraud detection.\nMore details on current and past projects on related topics are available on http://mlg.ulb.ac.be/BruFence and http://mlg.ulb.ac.be/ARTML\n\nPlease cite: Andrea Dal Pozzolo, Olivier Caelen, Reid A. Johnson and Gianluca Bontempi. Calibrating Probability with Undersampling for Unbalanced Classification. In Symposium on Computational Intelligence and Data Mining (CIDM), IEEE, 2015","isRemoved":false,"isVersionRemoved":false,"isFeatured":true,"isSuperFeatured":false,"scheduledToBeFeatured":null,"scheduledToBeUnFeatured":null,"scheduledToBeSuperFeatured":null,"scheduledToBeUnSuperFeatured":null,"privateGroupId":null,"datasetVersionId":684,"datasetVersionNumber":2,"lastVersionNumber":2,"datasetUrl":"/dalpozz/creditcardfraud","datasetExternalUrl":"https://www.kaggle.com/dalpozz/creditcardfraud","originalImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/310/684/3503c6c827ca269cc00ffa66f2a9c207/dataset-original.jpg","coverImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/310/684/3503c6c827ca269cc00ffa66f2a9c207/dataset-cover.jpg","cardImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/310/684/3503c6c827ca269cc00ffa66f2a9c207/dataset-card.jpg","thumbnailImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/310/684/3503c6c827ca269cc00ffa66f2a9c207/dataset-thumbnail.jpg","license":{"id":5,"name":"Database: Open Database, Contents: Database Contents","description":"Database: Open Database \u003ca href=\u0022http://opendatacommons.org/licenses/odbl/1.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e, Contents: Database Contents \u003ca href=\u0022http://opendatacommons.org/licenses/dbcl/1.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"http://opendatacommons.org/licenses/dbcl/1.0/","displaySequence":null},"voteCount":1032,"upVoteUrl":"/dalpozz/creditcardfraud/vote","creatorUserId":14069,"creatorDisplayName":"Andrea","ownerTwitter":null,"lastUpdated":"2016-11-05T09:08:46.503Z","downloadUrl":"/dalpozz/creditcardfraud/downloads/creditcardfraud.zip","downloadSize":71387154,"newNotebookUrl":"/Scripts/NewNotebook?datasetVersionId=684","newScriptUrl":"/Scripts/NewScriptAsync?datasetVersionId=684","hasAlreadyVotedUp":false,"isOldDatasetVersion":false,"numberOfViews":393415,"numberOfDownloads":46823,"numberOfScripts":1747,"numberOfTopics":72,"privateGroupMemberCount":0,"canEdit":false,"canEditSlug":false,"canEditPublishStatus":false,"canEditFeatureStatus":false,"canEditPrivateGroup":false,"canEditDescription":false,"hideVersionStatuses":true,"cardImageLeft":480,"cardImageTop":0,"cardImageWidth":1440,"cardImageHeight":1440,"coverImageLeft":0,"coverImageTop":369,"coverImageWidth":2395,"coverImageHeight":504,"datasetVersions":[{"id":684,"slug":"creditcardfraud","name":"Credit Card Fraud Detection","creationDate":"2016-11-05T09:08:46.503Z","versionNumber":2,"versionNotes":"CSV format","thumbnailImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/310/684/3503c6c827ca269cc00ffa66f2a9c207/dataset-thumbnail.jpg","datasetVersionUrl":"/dalpozz/creditcardfraud/version/2","status":"ready","isRemoved":false},{"id":670,"slug":"creditcardfraud","name":"Credit Card Fraud Detection","creationDate":"2016-11-03T13:21:36.757Z","versionNumber":1,"versionNotes":"Rdata format","thumbnailImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/310/670/default-backgrounds/dataset-thumbnail.png","datasetVersionUrl":"/dalpozz/creditcardfraud/version/1","status":"ready","isRemoved":false}],"scripts":[{"name":"In depth skewed data classif. (93% recall acc now)","url":"/joparga3/in-depth-skewed-data-classif-93-recall-acc-now","lastRunDate":"2016-12-17T09:03:25.25Z","totalVotes":228},{"name":"Predicting Fraud with TensorFlow","url":"/currie32/predicting-fraud-with-tensorflow","lastRunDate":"2017-03-29T04:49:28.533Z","totalVotes":104},{"name":"GBM vs xgboost vs lightGBM","url":"/nschneider/gbm-vs-xgboost-vs-lightgbm","lastRunDate":"2017-09-14T16:55:25.52Z","totalVotes":60}],"discussions":[{"title":"Random forests gets 0.97 precision-recall curve","url":"/forums/f/1838/credit-card-fraud-detection/t/45639/random-forests-gets-0-97-precision-recall-curve","lastPost":"2017-12-14T02:07:26.797Z","totalReplies":0},{"title":"In depth skewed data classif. (93% recall acc now)","url":"/felipeleiteantunes/in-depth-skewed-data-classif-93-recall-acc-now/comments","lastPost":"2017-12-13T18:46:51.04Z","totalReplies":0},{"title":"Dataset suggestion","url":"/forums/f/1838/credit-card-fraud-detection/t/25072/dataset-suggestion","lastPost":"2017-12-12T22:15:29.397Z","totalReplies":12}],"contributors":[{"userId":329561,"totalScriptVotes":228,"totalScripts":1,"totalForumMessages":2,"totalForumMessageVotes":0,"totalScore":231.0,"displayName":"joparga3","performanceTier":"Novice","userUrl":"/joparga3","rank":"1st","userAvatarUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/329561-gr.jpg"},{"userId":694213,"totalScriptVotes":105,"totalScripts":3,"totalForumMessages":5,"totalForumMessageVotes":3,"totalScore":116.0,"displayName":"Currie32","performanceTier":"Expert","userUrl":"/currie32","rank":"2nd","userAvatarUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/694213-kg.jpg"},{"userId":7657,"totalScriptVotes":60,"totalScripts":1,"totalForumMessages":4,"totalForumMessageVotes":1,"totalScore":66.0,"displayName":"Neil Schneider, FSA","performanceTier":"Grandmaster","userUrl":"/nschneider","rank":"3rd","userAvatarUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/7657-gr.jpg"}],"pageMessages":[],"feed":[{"activityType":"scriptFork","url":"/saxinou/fork-of-rare-events","userName":"saxinou","userAvatarUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/default-thumb.png","date":"2017-12-14T14:23:28.773Z","userDisplayName":"Saxinou","title":"Fork of Rare Events","versionNumber":1,"userUrl":"/saxinou"},{"activityType":"scriptRun","url":"/gpreda/credit-card-fraud-detection-with-rf-auc-0-93","userName":"gpreda","userAvatarUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/769452-kg.jpg","date":"2017-12-14T12:40:05.823Z","userDisplayName":"Gabriel Preda","title":"Credit Card Fraud Detection with RF (AUC=0.93)","versionNumber":27,"userUrl":"/gpreda"},{"activityType":"topic","url":"/forums/f/1838/credit-card-fraud-detection/t/45639/random-forests-gets-0-97-precision-recall-curve","userName":"raphaelespanha","userAvatarUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/1034028-kg.png","date":"2017-12-14T02:07:26.797Z","userDisplayName":"Raphael Espanha","title":"Random forests gets 0.97 precision-recall curve","versionNumber":0,"userUrl":"/raphaelespanha"},{"activityType":"scriptRun","url":"/raphaelespanha/quick-way-to-precision-recall-curve-0-97","userName":"raphaelespanha","userAvatarUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/1034028-kg.png","date":"2017-12-14T01:57:06.627Z","userDisplayName":"Raphael Espanha","title":"quick way to precision-recall curve = 0.97","versionNumber":4,"userUrl":"/raphaelespanha"},{"activityType":"scriptComment","url":"/felipeleiteantunes/in-depth-skewed-data-classif-93-recall-acc-now/comments","userName":"cirofo","userAvatarUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/1479018-gp.jpg","date":"2017-12-13T18:46:51.04Z","userDisplayName":"Ciro Oliveira","title":"In depth skewed data classif. (93% recall acc now)","versionNumber":0,"userUrl":"/cirofo"}],"privateGroups":[{"id":0,"name":"Publicly Accessible"}],"suggestions":[{"entityType":"dataset","entityId":504,"title":"Global Terrorism Database","entityUrl":"/START-UMD/gtd","thumbnailImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/504/1012/b4f1185ba3ab02238e27a7e943fc8437/dataset-thumbnail.png","owner":{"id":284,"imageUrl":"https://kaggle2.blob.core.windows.net/organizations/284/thumbnail.png?r=798","isOrganization":true,"name":"START Consortium","profileUrl":"/START-UMD","slug":"START-UMD","maxFileSizeBytes":null}},{"entityType":"dataset","entityId":1069,"title":"Synthetic Financial Datasets For Fraud Detection","entityUrl":"/ntnu-testimon/paysim1","thumbnailImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/1069/1927/4cbcc70173f19dc478109f129adc91a8/dataset-thumbnail.jpg","owner":{"id":595,"imageUrl":"https://kaggle2.blob.core.windows.net/organizations/595/thumbnail.png%3Fr=768","isOrganization":true,"name":"TESTIMON @ NTNU","profileUrl":"/ntnu-testimon","slug":"ntnu-testimon","maxFileSizeBytes":null}},{"entityType":"dataset","entityId":2872,"title":"Electoral Donations in Brazil","entityUrl":"/felipeleiteantunes/electoral-donations-brazil2014","thumbnailImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/2872/4826/085c49a44e3007e719246b02c675ea70/dataset-thumbnail.jpg","owner":{"id":601403,"imageUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/601403-gr.jpg","isOrganization":false,"name":"FelipeLeiteAntunes","profileUrl":"/felipeleiteantunes","slug":"felipeleiteantunes","maxFileSizeBytes":null}},{"entityType":"dataset","entityId":129,"title":"Daily News for Stock Market Prediction","entityUrl":"/aaron7sun/stocknews","thumbnailImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/129/271/d9bc2e53eef6405edcd19fecbfdb83aa/dataset-thumbnail.jpg","owner":{"id":356170,"imageUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/356170-gp.jpg","isOrganization":false,"name":"Aaron7sun","profileUrl":"/aaron7sun","slug":"aaron7sun","maxFileSizeBytes":null}},{"entityType":"dataset","entityId":1346,"title":"Bitcoin Historical Data","entityUrl":"/mczielinski/bitcoin-historical-data","thumbnailImageUrl":"https://kaggle2.blob.core.windows.net/datasets-images/1346/2425/573bbb9b260839fc8208792d1e0ba7e5/dataset-thumbnail.jpg","owner":{"id":110652,"imageUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/default-thumb.png","isOrganization":false,"name":"Zielak","profileUrl":"/mczielinski","slug":"mczielinski","maxFileSizeBytes":null}}],"discussion":{"canDownvote":false,"dataUrl":"/forums/1838/topics.json","id":1838,"isRootLevel":false,"isSubscribed":false,"initialTopics":null,"paramValues":{"category":"all","kind":"all","page":1,"search":null,"group":"all","sortBy":"hot"}},"currentTab":"home","topicId":null,"isNewTopic":false,"newTopic":{"allowAttachments":false,"authorRanking":null,"authorTier":"novice","authorType":"topic","forumId":1838,"parentName":"Credit Card Fraud Detection","parentUrl":"/dalpozz/creditcardfraud"},"canSeeCategories":true,"categories":{"categories":[{"id":11108,"name":"finance","fullPath":"society and social sciences \u003e society \u003e finance","listingUrl":"/datasets?tagids=11108","topicUrl":null,"fontAwesomeIcon":null,"description":"The finance tag covers datasets and kernels about money and investing. If you need to test some new cryptocurrency investment strategies or ward off those pesky credit card fraud enthusiasts, then you\u0027ve come to the right place.","isInherited":false,"datasetCount":124,"competitionCount":2,"scriptCount":129,"totalCount":255},{"id":11104,"name":"crime","fullPath":"society and social sciences \u003e society \u003e crime","listingUrl":"/datasets?tagids=11104","topicUrl":null,"fontAwesomeIcon":null,"description":"The crime category is where you can find data and kernels that will really brighten up your day. You have homocide reports, mass shootings, and all the other fun criminal activities.","isInherited":false,"datasetCount":95,"competitionCount":1,"scriptCount":128,"totalCount":224},{"id":null,"name":"medium","fullPath":null,"listingUrl":null,"topicUrl":null,"fontAwesomeIcon":null,"description":"Dataset size: medium (10MB to 1GB)","isInherited":true,"datasetCount":0,"competitionCount":0,"scriptCount":0,"totalCount":0},{"id":null,"name":"featured","fullPath":null,"listingUrl":null,"topicUrl":null,"fontAwesomeIcon":null,"description":"This dataset has been featured by the Kaggle team","isInherited":true,"datasetCount":0,"competitionCount":0,"scriptCount":0,"totalCount":0}],"type":"dataset"},"upvoteSuggestion":{"voteCount":1032,"upVoteUrl":"/dalpozz/creditcardfraud/vote","upvoters":[{"id":1127074,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/default-thumb.png","userName":"zjpzjp","displayName":"ZJPzjp","profileUrl":"/zjpzjp"},{"id":830199,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/default-thumb.png","userName":"chilianlin87","displayName":"Lianlin Chi","profileUrl":"/chilianlin87"},{"id":887225,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/887225-gp.jpg","userName":"ayanmaity","displayName":"AYAN MAITY","profileUrl":"/ayanmaity"},{"id":1493473,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/1493473-gr.jpg","userName":"ankurdotb","displayName":"Ankur Banerjee","profileUrl":"/ankurdotb"},{"id":745275,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/745275-kg.jpg","userName":"adityavamsikiran","displayName":"adityavamsikiran","profileUrl":"/adityavamsikiran"},{"id":408657,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/408657-gr.jpg","userName":"kennethlimjf","displayName":"Kenneth Lim","profileUrl":"/kennethlimjf"},{"id":1373005,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/default-thumb.png","userName":"odiyan","displayName":"Shyam P","profileUrl":"/odiyan"},{"id":996598,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/996598-gp.jpg","userName":"paragmittal","displayName":"ParagMittal","profileUrl":"/paragmittal"},{"id":1491977,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/1491977-gp.jpg","userName":"leandro8776","displayName":"leandro","profileUrl":"/leandro8776"},{"id":1472615,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/default-thumb.png","userName":"lewben","displayName":"Buendia","profileUrl":"/lewben"},{"id":741363,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/741363-gp.jpg","userName":"glassfish","displayName":"NecatiBatur","profileUrl":"/glassfish"},{"id":1477851,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/default-thumb.png","userName":"mecury","displayName":"mecury","profileUrl":"/mecury"},{"id":429507,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/429507-kg.jpg","userName":"huichengxiao","displayName":"xiaohuicheng","profileUrl":"/huichengxiao"},{"id":919476,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/919476-fb.jpg","userName":"rakeshnasa","displayName":"RakeshNasa","profileUrl":"/rakeshnasa"},{"id":1252422,"thumbnailUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/default-thumb.png","userName":"duanwee","displayName":"Wei Duan","profileUrl":"/duanwee"}]},"canSeeNewDatasetsList":true,"type":"fileset","licenseGroups":[{"id":1,"name":"Creative Commons","licenses":[{"id":1,"name":"CC0: Public Domain","description":"CC0: Public Domain \u003ca href=\u0022https://creativecommons.org/publicdomain/zero/1.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"https://creativecommons.org/publicdomain/zero/1.0/","displaySequence":1},{"id":3,"name":"CC BY-NC-SA 4.0","description":"CC BY-NC-SA 4.0 \u003ca href=\u0022https://creativecommons.org/licenses/by-nc-sa/4.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"https://creativecommons.org/licenses/by-nc-sa/4.0/","displaySequence":2},{"id":8,"name":"CC BY-SA 4.0","description":"CC BY-SA 4.0 \u003ca href=\u0022https://creativecommons.org/licenses/by-sa/4.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"https://creativecommons.org/licenses/by-sa/4.0/","displaySequence":3},{"id":10,"name":"CC BY-SA 3.0","description":"CC BY-SA 3.0 \u003ca href=\u0022https://creativecommons.org/licenses/by-sa/3.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"https://creativecommons.org/licenses/by-sa/3.0/","displaySequence":4}],"displaySequence":1},{"id":2,"name":"GPL","licenses":[{"id":9,"name":"GPL 2","description":"GPL 2 \u003ca href=\u0022http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html","displaySequence":1}],"displaySequence":2},{"id":3,"name":"Open Database","licenses":[{"id":5,"name":"Database: Open Database, Contents: Database Contents","description":"Database: Open Database \u003ca href=\u0022http://opendatacommons.org/licenses/odbl/1.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e, Contents: Database Contents \u003ca href=\u0022http://opendatacommons.org/licenses/dbcl/1.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"http://opendatacommons.org/licenses/dbcl/1.0/","displaySequence":1},{"id":6,"name":"Database: Open Database, Contents: © Original Authors","description":"Database: Open Database \u003ca href=\u0022http://opendatacommons.org/licenses/odbl/1.0/\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e, Contents: © Original Authors","url":"http://opendatacommons.org/licenses/odbl/1.0/","displaySequence":2}],"displaySequence":3},{"id":4,"name":"Special Cases","licenses":[{"id":7,"name":"World Bank Dataset Terms of Use","description":"World Bank Dataset Terms of Use \u003ca href=\u0022http://web.worldbank.org/WBSITE/EXTERNAL/0,,contentMDK:22547097~pagePK:50016803~piPK:50016805~theSitePK:13,00.html\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"http://web.worldbank.org/WBSITE/EXTERNAL/0,,contentMDK:22547097~pagePK:50016803~piPK:50016805~theSitePK:13,00.html","displaySequence":1},{"id":2,"name":"Reddit API Terms","description":"Reddit API Terms \u003ca href=\u0022https://www.reddit.com/wiki/api\u0022 target=\u0022_blank\u0022\u003e\u003cspan class=\u0022fa fa-info-circle\u0022/\u003e\u003c/a\u003e","url":"https://www.reddit.com/wiki/api","displaySequence":2}],"displaySequence":4},{"id":5,"name":"Other","licenses":[{"id":11,"name":"Data files © Original Authors","description":"Data files © Original Authors","url":null,"displaySequence":1},{"id":12,"name":"Other (specified in description)","description":"Other (specified in description)","url":null,"displaySequence":2},{"id":4,"name":"Unknown","description":"Unknown","url":null,"displaySequence":3}],"displaySequence":5}],"owners":[{"id":0,"imageUrl":"/image-fetch/0","isOrganization":false,"name":null,"profileUrl":"/","slug":null,"maxFileSizeBytes":null},{"id":14069,"imageUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/14069-kg.jpg","isOrganization":false,"name":"Andrea","profileUrl":"/dalpozz","slug":"dalpozz","maxFileSizeBytes":10737418240}],"maxCompressedFileBytesAllowed":10737418240,"maxUncompressedFileBytesAllowed":10737418240,"maxTopLevelFilesAllowed":50,"canSeeDatasetWorker":true,"referrer":null,"title":"Credit Card Fraud Detection","slug":"creditcardfraud","licenseId":5,"data":{"id":684,"datasetId":310,"datasetVersionType":"fileset","versionNumber":2,"zipBlobFileId":31289,"totalSize":150828752,"name":"Credit Card Fraud Detection","description":"The datasets contains transactions made by credit cards in September 2013 by european cardholders. \nThis dataset presents transactions that occurred in two days, where we have 492 frauds out of 284,807 transactions. The dataset is highly unbalanced, the positive class (frauds) account for 0.172% of all transactions.\n\nIt contains only numerical input variables which are the result of a PCA transformation. Unfortunately, due to confidentiality issues, we cannot provide the original features and more background information about the data. Features V1, V2, ... V28 are the principal components obtained with PCA, the only features which have not been transformed with PCA are \u0027Time\u0027 and \u0027Amount\u0027. Feature \u0027Time\u0027 contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature \u0027Amount\u0027 is the transaction Amount, this feature can be used for example-dependant cost-senstive learning. Feature \u0027Class\u0027 is the response variable and it takes value 1 in case of fraud and 0 otherwise. \n\nGiven the class imbalance ratio, we recommend measuring the accuracy using the Area Under the Precision-Recall Curve (AUPRC). Confusion matrix accuracy is not meaningful for unbalanced classification.\n\nThe dataset has been collected and analysed during a  research collaboration of Worldline and the Machine Learning Group (http://mlg.ulb.ac.be) of ULB (Université Libre de Bruxelles) on big data mining and fraud detection.\nMore details on current and past projects on related topics are available on http://mlg.ulb.ac.be/BruFence and http://mlg.ulb.ac.be/ARTML\n\nPlease cite: Andrea Dal Pozzolo, Olivier Caelen, Reid A. Johnson and Gianluca Bontempi. Calibrating Probability with Undersampling for Unbalanced Classification. In Symposium on Computational Intelligence and Data Mining (CIDM), IEEE, 2015","type":"datasetVersion","children":[{"id":2087,"blobFileId":31288,"url":"/dalpozz/creditcardfraud/downloads/creditcard.csv","relativePath":"../input/creditcard.csv","creationDate":"2016-11-05T09:08:14Z","ownerSlug":"dalpozz","datasetSlug":"creditcardfraud","datasetVersionNumber":2,"isDummy":false,"size":71387154,"fullPath":null,"previewUrl":null,"downloadUrl":"/dalpozz/creditcardfraud/downloads/creditcard.csv","fileType":".csv","validationErrors":null,"name":"creditcard.csv","description":"CSV format\n\n 1. emphasized text","type":"datasetVersionFile","children":[{"columns":[{"name":"Time","description":"the seconds elapsed between each transaction and the first transaction in the dataset.","order":0,"originalType":"String","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V1","description":"First principle component","order":1,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V2","description":"Second principle component","order":2,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V3","description":"Third principle component","order":3,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V4","description":"Fourth principle component","order":4,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V5","description":"Fifth principle component","order":5,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V6","description":"Sixth principal component","order":6,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V7","description":"Seventh principal component","order":7,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V8","description":"Eighth principal component","order":8,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V9","description":"Ninth principal component","order":9,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V10","description":"Tenth principal component","order":10,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V11","description":"Eleventh principal component","order":11,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V12","description":"Twelfth principal component","order":12,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V13","description":"Thirteenth principle component","order":13,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V14","description":"Fourteenth principle component","order":14,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V15","description":"Fifteenth principle component","order":15,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V16","description":"Sixteenth principle component","order":16,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V17","description":"Seventeenth principle component","order":17,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V18","description":"Eighteenth principle component","order":18,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V19","description":"Nineteenth principle component","order":19,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V20","description":"Twentieth principle component","order":20,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V21","description":"Twenty-first principle component ","order":21,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V22","description":"Twenty-second principle component","order":22,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V23","description":"Twenty-third principle component","order":23,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V24","description":"Twenty-fourth principle component","order":24,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V25","description":"Twenty-fifth principle component","order":25,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V26","description":"Twenty-sixth principle component","order":26,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V27","description":"Twenty-seventh principle component","order":27,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"V28","description":"Twenty-eighth principle component","order":28,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"Amount","description":"Transaction Amount","order":29,"originalType":"Numeric","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null},{"name":"Class","description":"The actual classification classes \n","order":30,"originalType":"DateTime","type":"numeric","isNullable":false,"isPrimaryKey":false,"info":null}],"totalRows":null,"name":null,"description":null,"type":"genericTable","children":[],"collapsed":false,"info":{"metrics":null},"settings":{"csvSettings":null,"bigQuerySettings":null}}],"collapsed":false,"info":{"metrics":null},"settings":null}],"collapsed":false,"info":{"metrics":null},"settings":{"csvSettings":null,"bigQuerySettings":null}},"isPublished":true,"owner":{"id":14069,"imageUrl":"https://kaggle2.blob.core.windows.net/avatars/thumbnails/14069-kg.jpg","isOrganization":false,"name":"Andrea","profileUrl":"/dalpozz","slug":"dalpozz","maxFileSizeBytes":10737418240}});performance && performance.mark && performance.mark("DatasetContainer.componentCouldBootstrap");</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            preferredFont: "TeX",
+            availableFonts: ["STIX", "TeX"],
+            linebreaks: {
+                automatic: true
+            },
+            EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+        },
+        tex2jax: {
+            inlineMath: [["\\(", "\\)"], ["\\\\(", "\\\\)"]],
+            displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+            processEscapes: true,
+            ignoreClass: "tex2jax_ignore|dno"
+        },
+        TeX: {
+            noUndefined: {
+                attributes: {
+                    mathcolor: "red",
+                    mathbackground: "#FFEEEE",
+                    mathsize: "90%"
+                }
+            }
+        },
+        Macros: {
+            href: "{}"
+        },
+        skipStartupTypeset: true,
+        messageStyle: "none"
+    });
+</script>
+
+<script type="text/javascript" async crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+    </div>
+
+        <div class="site-layout__footer">
+            <footer class="site-footer">
+    <div class="site-footer__content">
+        <div class="site-footer__copyright">
+            <span>&copy; 2017 Kaggle Inc</span>
+        </div>
+        <nav class="site-footer__nav">
+            <a href="/team">Our Team</a>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/contact">Contact/Support</a>
+        </nav>
+        <nav class="site-footer__social">
+            <div data-component-name="SocialIcons"></div><script>var Kaggle=window.Kaggle||{};Kaggle.State=Kaggle.State||[];Kaggle.State.push();performance && performance.mark && performance.mark("SocialIcons.componentCouldBootstrap");</script>
+        </nav>
+    </div>
+</footer>
+
+        </div>
+</div>
+
+
+
+<script type="text/javascript">
+    var Kaggle = Kaggle || {};
+
+    Kaggle.Current = {
+        hasJupyterNotebookEditor: true,
+        hasEnvironmentVariables: false,
+        hasInteractiveScripts: false,
+        hasStandaloneKernelProxy: true,
+        hasKernelsAsDataSources: true,
+        antiForgeryToken: 'ixHWHwy3VtVzYozeKpGiW5-B3kslrg0_FBfLEiYQicbBs53yHnyOGqrqh5SE9on31SKeVjFi-2R2ybdwCjlhU3GG1bw1',
+        isAnonymous: true,
+        isFullScreen: false,
+        
+        
+        
+        
+        
+        
+        
+        
+    }
+        Kaggle.Current.log = function(){};
+        Kaggle.Current.warn = function(){};
+    var decodeUserDisplayName = function () {
+        var escapedUserDisplayName = Kaggle.Current.userDisplayNameEscaped;
+        try {
+          var textVersion = new DOMParser().parseFromString(escapedUserDisplayName, "text/html").documentElement.textContent;
+          if (textVersion) {
+              return textVersion;
+          }
+        } catch(ex) {}
+        
+        return escapedUserDisplayName;
+    }
+    Kaggle.Current.userDisplayName = decodeUserDisplayName();
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    var Kaggle = Kaggle || {};
+    Kaggle.PageMessages = [{"id":null,"type":"info","message":null,"dangerousHtmlMessage":"Please \u003ca href=\u0022/account/login?returnUrl=%2Fdalpozz%2Fcreditcardfraud\u0022\u003elogin\u003c/a\u003e to download this dataset.","isPersistent":true,"faIcon":null}];
+</script>
+
+
+<script src="/content/v/5dbea6ee9ce1/shared/js/kaggle.prism.min.js"></script>
+
+
+
+
+
+<script type="text/javascript">
+/* <![CDATA[ */
+goog_snippet_vars = function() {
+    var w = window;
+    w.google_conversion_id = 955616553;
+    w.google_conversion_label = "-SL0CM3tqXMQqZrWxwM";
+    w.google_conversion_value = 0.00;
+    w.google_conversion_currency = "USD";
+    w.google_remarketing_only = false;
+    w.google_conversion_language = "en";
+    w.google_conversion_format = "3";
+    w.google_conversion_color = "ffffff";
+}
+// DO NOT CHANGE THE CODE BELOW.
+goog_report_conversion = function(url) {
+    goog_snippet_vars();
+    window.google_conversion_format = "3";
+    var opt = new Object();
+    opt.onload_callback = function() {
+        if (typeof(url) != 'undefined') {
+            window.location = url;
+        }
+    }
+    var conv_handler = window['google_trackConversion'];
+    if (typeof(conv_handler) == 'function') {
+        conv_handler(opt);
+    }
+}
+/* ]]> */
+</script>
+<script type="text/javascript"
+src="//www.googleadservices.com/pagead/conversion_async.js">
+</script>
+
+
+
+
+
+    <script src="/static/assets/app.js?v=fd1a90bbfb05"></script>
+    
+        <script>
+            (function() {
+                if ('serviceWorker' in navigator) {
+                    
+                    navigator.serviceWorker.register("/static/assets/service-worker.js").then(function(reg) {
+                        
+                        reg.onupdatefound = function() {
+                            
+                            var installingWorker = reg.installing;
+                            installingWorker.onstatechange = function() {
+                                switch (installingWorker.state) {
+                                case 'installed':
+                                    if (navigator.serviceWorker.controller) {
+                                        
+                                        console.log('New or updated content is available.');
+                                    } else {
+                                        
+                                        console.log('Content is now available offline!');
+                                    }
+                                    break;
+                                case 'redundant':
+                                    console.error('The installing service worker became redundant.');
+                                    break;
+                                }
+                            };
+                        };
+                    }).catch(function(e) {
+                      console.error('Error during service worker registration:', e);
+                    });
+                }
+            })();
+        </script>
+</body>
+</html>
